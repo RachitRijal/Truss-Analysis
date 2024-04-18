@@ -1,6 +1,7 @@
 
 
 import numpy as np
+from functions import*
 
 #NodeList = NumberOfNodes*ProblemDimension
 NL = np.array([[0,0],
@@ -12,7 +13,7 @@ EL = np.array([[1,2],
                [2,3],
                [3,1]])
 
-#BoundaryConditions (x-axis,y-axis) => -1:fixed, 1:movable
+#BoundaryConditions:Dirichlet or Neumann (x-axis,y-axis) => -1:fixed, 1:movable
 DorN = np.array([[-1,-1],
                  [1,-1],
                  [1,1]])
