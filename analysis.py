@@ -52,3 +52,22 @@ K = assemble_stiffness(ENL, EL, NL, E, A)
 
 ENL[:,4*PD:5*PD] = U_u[:]
 ENL[:,5*PD:6*PD] = Fu[:]
+
+U_u = U_u.flatten()
+Fu = Fu.flatten()
+
+Fp = assemble_forces(ENL, NL)
+Up = assemble_displacement(ENL, NL)
+
+
+#Fragmentation of Global Stiffness Matrix
+K_UU = K[:DOFs,:DOFs]
+K_UP = K[:DOFs,DOFs:]
+K_PU = K[DOFs: ,:DOFs]
+K_PP = K[DOFs:,DOFs:]
+
+F = Fp - np.matmul(K_UP, Up)
+U_u = np.matmul(np.linalg.inv(K_UU),F)
+Fu = np.matmul(K_PU,U_u) + np.matmul(K_PP,Up)
+
+ENL = update_nodes(ENL, U_u, NL, Fu)

@@ -68,3 +68,47 @@ def element_stiffness(nl, ENL, E, A):
                            [-C*S, -S*S, C*S, S*S]])
     
     return k
+
+
+def assemble_forces(ENL, NL):
+    PD = np.size(NL, 1)
+    NoN = np.size(NL, 0)
+    FP = []
+    #Checking for known Force i.e. applied force
+    for i in range(NoN):
+        for j in range(PD):
+            if ENL[i,PD+j] == 1:
+                FP.append(ENL[i,5*PD+j])
+    FP = np.vstack([FP]).reshape(-1,1)
+
+    return FP
+
+def assemble_displacement(ENL, NL):
+    PD = np.size(NL, 1)
+    NoN = np.size(NL, 0)
+    UP = []
+    #Checking for known Displacement i.e. fixed nodes
+    for i in range(NoN):
+        for j in range(PD):
+            if ENL[i,PD+j] == -1:
+                UP.append(ENL[i,5*PD+j])
+    UP = np.vstack([UP]).reshape(-1,1)
+
+    return UP
+
+def update_nodes(ENL, U_u, NL, Fu):
+    PD = np.size(NL,1)
+    NoN = np.size(NL,0)
+    DOFs = 0
+    DOCs = 0
+    for i in range(NoN):
+        for j in range(PD):
+            #Check for whether displacement or force to be updated
+            if ENL[i, PD+j] == 1:
+                ENL[i,4*PD+j] = U_u[DOFs]
+                DOFs += 1
+            else:
+                ENL[i,5*PD+j] = Fu[DOCs]
+                DOCs += 1
+
+    return ENL
