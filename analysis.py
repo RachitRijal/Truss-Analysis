@@ -46,3 +46,9 @@ ENL[:,0:PD] = NL[:,:]
 ENL[:,PD:2*PD] = DorN[:,:]
 
 (ENL, DOFs, DOCs) = assign_BCs(NL,ENL)
+
+K = assemble_stiffness(ENL, EL, NL, E, A)
+
+
+ENL[:,4*PD:5*PD] = U_u[:]
+ENL[:,5*PD:6*PD] = Fu[:]
