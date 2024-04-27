@@ -1,6 +1,5 @@
-
-
 import numpy as np
+import pandas as pd
 from functions import*
 
 #NodeList = NumberOfNodes*ProblemDimension
@@ -71,3 +70,7 @@ U_u = np.matmul(np.linalg.inv(K_UU),F)
 Fu = np.matmul(K_PU,U_u) + np.matmul(K_PP,Up)
 
 ENL = update_nodes(ENL, U_u, NL, Fu)
+
+
+df = pd.DataFrame(ENL)
+df = df.to_string()
